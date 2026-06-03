@@ -18,7 +18,14 @@
       "*://*.flow.microsoft.com/",
       "*://*.make.powerautomate.com/",
       "*://*.make.powerapps.com/",
-      "*://*.api.powerplatform.com/"
+      "*://*.api.powerplatform.com/",
+      "*://*.make.gov.powerautomate.us/",
+      "*://*.make.high.powerautomate.us/",
+      "*://*.flow.microsoft.us/",
+      "*://*.make.gov.powerapps.us/",
+      "*://*.make.high.powerapps.us/",
+      "*://*.api.gov.powerplatform.microsoft.us/",
+      "*://*.api.high.powerplatform.microsoft.us/"
    ],
    "action": {
       "default_title": "Power Automate Tools"
