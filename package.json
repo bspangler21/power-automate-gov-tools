@@ -1,7 +1,7 @@
 {
   "name": "power-automate-gov-tools",
-  "version": "1.2.0",
-  "description": "The Chrome/Edge extension that enables editing a Power Automate flow definition as JSON in commercial, GCC, and GCC High tenants.",
+  "version": "1.0.0",
+  "description": "The Chrome/Edge extension that enables editing a Power Automate flow definition as JSON in commercial, GCC, and GCC High tenants. Built from Kamil Rithaler's Power Automate Tools extension.",
   "main": "dist/app.js",
   "scripts": {
     "build": "cross-env NODE_ENV=production && npm run clean && webpack",
@@ -10,7 +10,7 @@
     "publish": "npm run build && npm run pack",
     "start": "cross-env NODE_ENV=development && webpack --watch --progress"
   },
-  "author": "Kamil Rithaler and Brett Spangler",
+  "author": "Brett Spangler",
   "license": "GNU GPL v3",
   "devDependencies": {
     "@types/chrome": "0.0.180",
