@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="g" gradientUnits="userSpaceOnUse" x1="110" y1="430" x2="402" y2="90">
+      <stop offset="0" stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#06B6D4"/>
+    </linearGradient>
+  </defs>
+  <!-- Concept C3: unfilled shield (gradient border) around the B flow glyph, no star.
+       Braces spaced wide; flow glyph shrunk and centered with clear gaps each side. -->
+  <path d="M256 52 L430 110 L430 266 C430 358 350 426 256 458 C162 426 82 358 82 266 L82 110 Z"
+        fill="none" stroke="url(#g)" stroke-width="18" stroke-linejoin="round"/>
+  <!-- JSON braces (slate), spines at x=166 and x=346 -->
+  <g fill="none" stroke="#64748B" stroke-width="22" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M188 158 C166 158 166 172 166 190 C166 214 166 226 146 250 C166 274 166 286 166 310 C166 328 166 340 188 340"/>
+    <path d="M324 158 C346 158 346 172 346 190 C346 214 346 226 366 250 C346 274 346 286 346 310 C346 328 346 340 324 340"/>
+  </g>
+  <!-- flow: outlined node -> filled node, centered between braces with ~30-40px gaps -->
+  <path d="M214 282 L214 236 L282 236 L282 228" fill="none" stroke="url(#g)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="214" cy="300" r="18" fill="none" stroke="url(#g)" stroke-width="14"/>
+  <rect x="258" y="180" width="48" height="48" rx="12" fill="url(#g)"/>
+</svg>

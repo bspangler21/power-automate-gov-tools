@@ -30,6 +30,24 @@ function getActiveTabState(): TabState | undefined {
   return undefined;
 }
 
+//-- Modern Power Platform API hosts (flow CRUD), per cloud (commercial, GCC, GCC High)
+function isNewApiHost(hostname: string): boolean {
+  return (
+    hostname.includes("api.powerplatform.com") || //-- Commercial
+    hostname.includes("api.gov.powerplatform.microsoft.us") || //-- GCC
+    hostname.includes("api.high.powerplatform.microsoft.us")
+  );
+}
+
+//-- Legacy Flow API hosts (used for validation), per cloud. The GCC/GCC High hostname is undocumented,
+//-- so any flow.microsoft.us host that is an API subdomain (contains "api") rather than the maker/flow portal itself.
+function isLegacyApiHost(hostname: string): boolean {
+  return (
+    hostname.includes("api.flow.microsoft.com") || //-- Commercial
+    (hostname.includes("flow.microsoft.us") && hostname.includes("api")) //-- GCC and GCC High
+  );
+}
+
 chrome.action.disable();
 
 chrome.action.onClicked.addListener((tab) => {
@@ -69,6 +87,9 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
     urls: [
       "https://*.api.flow.microsoft.com/*",
       "https://*.api.powerplatform.com/*",
+      "https://*.api.gov.powerplatform.microsoft.us/*",
+      "https://*.api.high.powerplatform.microsoft.us/*",
+      "https://*.flow.microsoft.us/*",
     ],
   },
   ["requestHeaders"]
@@ -128,22 +149,23 @@ function listenFlowApiRequests(
     (x) => x.name.toLowerCase() === "authorization"
   )?.value;
 
-  // Track both API base URLs per tab: the new powerplatform.com URL for flow
-  // CRUD operations, and the legacy flow.microsoft.com URL for validation.
+  //-- Track both API base URLs per tab: the new Power Platform API URL for flow
+  //-- CRUD operations, and the Legacy Flow API URL for validation. Both hosts
+  //-- vary by cloud (commercial, GCC, GCC High); see isNewApiHost / isLegacyApiHost
   const url = new URL(details.url);
   const baseUrl = `${url.protocol}//${url.hostname}/`;
 
-  if (url.hostname.includes("api.powerplatform.com")) {
+  if (isNewApiHost(url.hostname)) {
     tabState.apiUrl = baseUrl;
     if (token) {
       tabState.apiToken = token;
     }
-  } else if (url.hostname.includes("api.flow.microsoft.com")) {
+  } else if (isLegacyApiHost(url.hostname)) {
     tabState.legacyApiUrl = baseUrl;
     if (token) {
       tabState.legacyApiToken = token;
     }
-    // Also set as primary apiUrl if we don't have a powerplatform.com one yet
+    //-- Also set as primary apiUrl if we don't have a powerplatform.com one yet
     if (!tabState.apiUrl) {
       tabState.apiUrl = baseUrl;
       if (token) {
@@ -152,7 +174,7 @@ function listenFlowApiRequests(
     }
   }
 
-  // Notify the editor tab if this is the initiator tab
+  //-- Notify the editor tab if this is the initiator tab
   if (details.tabId === state.initiatorTabId) {
     sendTokenChanged();
   }
@@ -160,7 +182,7 @@ function listenFlowApiRequests(
   if (tabState.lastMatchedRequest && tabState.lastMatchedRequest.envId) {
     chrome.action.enable(details.tabId);
   } else if (tabState.lastMatchedRequest && !tabState.lastMatchedRequest.envId) {
-    // We have a flow ID (from powerplatform.com URL) but need envId from the tab URL
+    //-- We have a flow ID (from powerplatform.com URL) but need envId from the tab URL
     tryResolveEnvIdFromTab(details.tabId);
   } else {
     tryExtractFlowDataFromTabUrl(details.tabId);
@@ -240,7 +262,7 @@ function extractFlowDataFromUrl(
     return null;
   }
 
-  // Old format: .../providers/Microsoft.ProcessSimple/environments/{envId}/flows/{flowId}
+  //-- Old format: .../providers/Microsoft.ProcessSimple/environments/{envId}/flows/{flowId}
   const oldPattern =
     /\/providers\/Microsoft\.ProcessSimple\/environments\/([^/]+)\/flows\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i;
 
@@ -252,15 +274,18 @@ function extractFlowDataFromUrl(
     };
   }
 
-  // New format: https://{encoded-env}.{environment|tenant}.api.powerplatform.com/powerautomate/flows/{flowId}
+  //-- New format: https://{encoded-env}.{environment|tenant}.<api-host>/powerautomate/flows/{flowId}
+  //-- Host agnostic on purpose: the webRequest listener already restricts which API hosts reach
+  //-- this handler, so this matches the new path across all clouds (commercial, GCC, GCC High) without hardcoding the
+  //-- Power Platform API hostname.
   const newPattern =
-    /\.api\.powerplatform\.com\/powerautomate\/flows\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i;
+    /\/powerautomate\/flows\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i;
 
   const newResult = newPattern.exec(requestUrl);
   if (newResult) {
-    // The flow ID is in the path, but the environment ID is encoded in the
-    // subdomain and not directly usable. Return the flow ID and resolve the
-    // environment ID from the tab URL instead.
+    //-- The flow ID is in the path, but the environment ID is encoded in the
+    //-- subdomain and not directly usable. Return the flow ID and resolve the
+    //-- environment ID from the tab URL instead.
     return {
       envId: null,
       flowId: newResult[1],
