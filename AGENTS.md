@@ -71,8 +71,8 @@ To develop locally: run `npm start`, then load the `dist/` directory as an unpac
 
 ## CI
 
-GitHub Actions (`.github/workflows/build.yml`) runs on push/PR to `master`:
-- Node.js 16.x on `ubuntu-latest`
+GitHub Actions (`.github/workflows/build.yml`) runs on push/PR to `main`:
+- Node.js 22.x on `ubuntu-latest`
 - `npm ci` then `npm run build`
 - Uploads `dist/` as a build artifact
 
