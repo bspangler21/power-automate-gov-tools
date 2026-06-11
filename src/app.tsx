@@ -4,7 +4,7 @@ import { mergeStyles } from '@fluentui/react/lib/Styling';
 import { loader } from '@monaco-editor/react';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { createRoot } from 'react-dom/client';
-import { HashRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router';
 import { NavBar } from './common/components/NavBar';
 import {
   ApiProviderContext,
