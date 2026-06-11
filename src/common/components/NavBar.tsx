@@ -18,7 +18,7 @@ export const NavBar: React.FC = () => {
     <Stack horizontal tokens={{ childrenGap: 10 }} className={navBarStyles}>
       <div className={appTitleStyles}>
         <Icon iconName="TriggerAuto" />
-        <span> Power Automate Tools</span>
+        <span> Power Automate Gov Tools</span>
       </div>
     </Stack>
   );

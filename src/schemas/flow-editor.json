@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "$id": "https://power-automate-tools.local/flow-editor.json#",
-  "title": "Power Automate Tools Flow Editor",
+  "title": "Power Automate Gov Tools Flow Editor",
   "description": "Edit Power Automate Flow",
   "type": "object",
   "properties": {

@@ -1,6 +1,6 @@
 ![Extension Logo](public/icons/pa-tools-128.png)
 
-# Power Automate Tools Extension
+# Power Automate Gov Tools Extension
 
 ![Extension Screen Shot](static/pa-tools-extension.jpg)
 

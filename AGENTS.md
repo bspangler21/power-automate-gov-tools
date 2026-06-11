@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Power Automate Tools is a Chrome/Edge browser extension (Manifest V3) that lets users edit Microsoft Power Automate flow definitions as raw JSON using an embedded Monaco Editor. It piggybacks on the user's existing Power Automate session by intercepting API requests to extract auth tokens, then uses those tokens for its own API calls to fetch, save, and validate flows.
+Power Automate Gov Tools is a Chrome/Edge browser extension (Manifest V3) that lets users edit Microsoft Power Automate flow definitions as raw JSON using an embedded Monaco Editor. It piggybacks on the user's existing Power Automate session by intercepting API requests to extract auth tokens, then uses those tokens for its own API calls to fetch, save, and validate flows.
 
 ## Tech Stack
 
