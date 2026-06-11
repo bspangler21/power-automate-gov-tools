@@ -17,3 +17,15 @@ updates:
     commit-message:
       prefix: "[dependabot] Version update "
       include: "scope"
+    ignore:
+      # React 19 is blocked by @fluentui/react v8, whose peer range caps
+      # react/react-dom and their @types at <19.0.0. Remove these entries
+      # when a Fluent UI v9 migration is planned.
+      - dependency-name: "react"
+        versions: [">=19"]
+      - dependency-name: "react-dom"
+        versions: [">=19"]
+      - dependency-name: "@types/react"
+        versions: [">=19"]
+      - dependency-name: "@types/react-dom"
+        versions: [">=19"]
